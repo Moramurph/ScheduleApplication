@@ -13,6 +13,9 @@ public class MainListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ////////////////////TESTING///////////////////////////
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
