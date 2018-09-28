@@ -20,7 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".EventCreationActivity"></activity>
+        <activity android:name=".EventCreationActivity" />
+        <activity
+            android:name=".EventInformationActivity"
+            android:label="@string/title_activity_event_information"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
