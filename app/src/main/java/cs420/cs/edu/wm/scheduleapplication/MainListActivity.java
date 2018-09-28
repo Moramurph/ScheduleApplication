@@ -15,6 +15,7 @@ public class MainListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         ////////////////////TESTING///////////////////////////
+        //Hi scott////
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
