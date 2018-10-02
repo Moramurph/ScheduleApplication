@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cs420.cs.edu.wm.scheduleapplication">
 
+    <uses-sdk android:minSdkVersion="20"
+        android:targetSdkVersion="27"
+        android:maxSdkVersion="28" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
