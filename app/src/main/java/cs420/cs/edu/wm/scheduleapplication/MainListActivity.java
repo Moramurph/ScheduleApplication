@@ -1,15 +1,21 @@
 package cs420.cs.edu.wm.scheduleapplication;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainListActivity extends AppCompatActivity {
+
+    private final String TAG = "MainListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +25,18 @@ public class MainListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(getApplicationContext(), EventCreationActivity.class);
+                startActivity(intent);
+
+                Log.v(TAG, "Create Event button clicked, switching to Creation Page...");
+                Context context = getApplicationContext();
+                CharSequence text = "Create Event button clicked, switching to Creation Page...";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, text, duration).show();
             }
         });
     }

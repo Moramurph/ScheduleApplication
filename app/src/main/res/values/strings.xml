@@ -2,6 +2,18 @@
     <string name="app_name">ScheduleApplication</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_event_information">EventInformationActivity</string>
+    <string name="event_creation_title">TITLE:</string>
+    <string name="event_creation_date">DATE:</string>
+    <string name="event_creation_description">DESCRIPTION:</string>
+    <string name="event_creation_url">URL:</string>
+
+
+
+
+
+
+
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

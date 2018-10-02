@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class WelcomeActivity extends AppCompatActivity {
 
     private Button continueButton;
-    private final String TAG = "ContinueActivity";
+    private final String TAG = "WelcomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
