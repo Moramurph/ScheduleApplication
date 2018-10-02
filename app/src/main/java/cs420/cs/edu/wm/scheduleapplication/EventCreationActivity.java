@@ -9,11 +9,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class EventCreationActivity extends AppCompatActivity {
 
     private Button submitButton;
+    private EditText titleInput;
+    private EditText dateInput;
+    private EditText descriptionInput;
+    private EditText urlInput;
+    private String title;
+    private String date;
+    private String description;
+    private String url;
     private final String TAG = "EventCreation";
 
     @Override
@@ -21,6 +30,12 @@ public class EventCreationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_creation);
 
+        titleInput = findViewById(R.id.title_input);
+        dateInput = findViewById(R.id.date_input);
+        descriptionInput = findViewById(R.id.description_input);
+        urlInput = findViewById(R.id.url_input);
+
+        //TODO Make sure that url is using proper https://
         submitButton = findViewById(R.id.submit_button);
         setupSubmitButton();
 
@@ -30,6 +45,13 @@ public class EventCreationActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainListActivity.class);
+                getInputs();
+
+                intent.putExtra("title", title);
+                intent.putExtra("date", date);
+                intent.putExtra("description", description);
+                intent.putExtra("url", url);
+
                 setResult(Activity.RESULT_OK, intent);
                 finish();
 
@@ -40,6 +62,14 @@ public class EventCreationActivity extends AppCompatActivity {
                 Toast.makeText(context, text, duration).show();
             }
         });
+    }
+
+    private void getInputs() {
+        title = titleInput.getText().toString();
+        description = descriptionInput.getText().toString();
+        date = dateInput.getText().toString();
+        url = urlInput.getText().toString();
+
     }
 
 

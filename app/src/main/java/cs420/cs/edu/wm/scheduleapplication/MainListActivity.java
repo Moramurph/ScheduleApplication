@@ -12,28 +12,37 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainListActivity extends AppCompatActivity {
 
     private final String TAG = "MainListActivity";
     private ListView listView;
+    private ArrayList<String> listItems = new ArrayList<String>();
+    private ArrayAdapter<String> adapter;
     private final int REQUEST = 42;
+
+    private String title;
+    private String date;
+    private String description;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         listView = findViewById(R.id.event_list);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+        listView.setAdapter(adapter);
 
-        //Add items to list to click on
-        ///////////////////////////////////////////////////////////////////////
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -45,7 +54,7 @@ public class MainListActivity extends AppCompatActivity {
         });
         ///////////////////////////////////////////////////////////////////////
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_button);
+        FloatingActionButton fab = findViewById(R.id.create_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +68,18 @@ public class MainListActivity extends AppCompatActivity {
                 Toast.makeText(context, text, duration).show();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                title = data.getExtras().getString("title");
+                adapter.add(title);
+            }
+        }
     }
 
     @Override
