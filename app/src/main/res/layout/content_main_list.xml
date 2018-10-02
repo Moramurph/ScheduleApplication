@@ -11,12 +11,13 @@
     <ListView
         android:id="@+id/event_list"
         android:layout_width="396dp"
-        android:layout_height="520dp"
-        tools:layout_editor_absoluteX="-4dp"
-        tools:layout_editor_absoluteY="-1dp"
+        android:layout_height="569dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.56" />
 
 
 </android.support.constraint.ConstraintLayout>
