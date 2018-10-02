@@ -11,11 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainListActivity extends AppCompatActivity {
 
     private final String TAG = "MainListActivity";
+    private ListView listView;
+    private final int REQUEST = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +29,28 @@ public class MainListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        listView = findViewById(R.id.event_list);
+
+        //Add items to list to click on
+        ///////////////////////////////////////////////////////////////////////
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getApplicationContext(),
+                        "Click ListItem Number " + position, Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+        ///////////////////////////////////////////////////////////////////////
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EventCreationActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST);
 
                 Log.v(TAG, "Create Event button clicked, switching to Creation Page...");
                 Context context = getApplicationContext();
