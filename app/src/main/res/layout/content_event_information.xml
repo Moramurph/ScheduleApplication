@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_event_information">
 
     <TextView
+        android:id="@+id/event_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
