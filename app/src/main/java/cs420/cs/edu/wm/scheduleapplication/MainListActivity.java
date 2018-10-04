@@ -23,13 +23,9 @@ public class MainListActivity extends AppCompatActivity {
     private final String TAG = "MainListActivity";
     private ListView listView;
     private ArrayList<String> listItems = new ArrayList<String>();
+    private ArrayList<Event> listEvents = new ArrayList<Event>();
     private ArrayAdapter<String> adapter;
     private final int REQUEST = 42;
-
-    private String title;
-    private String date;
-    private String description;
-    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +46,13 @@ public class MainListActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "Click ListItem Number " + position, Toast.LENGTH_LONG)
                         .show();
+
+                Log.v(TAG, listEvents.get(position).getInformation());
+
+                Intent i = new Intent(getApplicationContext(), EventInformationActivity.class);
+                i.putExtra("info", listEvents.get(position).getInformation());
+
+                startActivity(i);
             }
         });
         ///////////////////////////////////////////////////////////////////////
@@ -76,8 +79,10 @@ public class MainListActivity extends AppCompatActivity {
         if (requestCode == REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                title = data.getExtras().getString("title");
-                adapter.add(title);
+                Event e = new Event(data.getExtras().getString("title"), data.getExtras().getString("date"), data.getExtras().getString("description"), data.getExtras().getString("url"));
+                e.initialize();
+                listEvents.add(e);
+                adapter.add(e.getTitle());
             }
         }
     }
