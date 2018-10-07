@@ -7,6 +7,8 @@ class Event {
     private String description;
     private String url;
 
+    //Camera test branch
+
     private String info;
 
 
