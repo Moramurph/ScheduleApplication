@@ -7,7 +7,6 @@ class Event {
     private String description;
     private String url;
 
-    //Camera test branch
 
     private String info;
 
@@ -16,7 +15,9 @@ class Event {
         this.title = t;
         this.date = d;
         this.description = ds;
-        this.url = u;
+        this.url = this.fixURL(u);
+
+
     }
 
     protected void initialize() {
@@ -27,7 +28,14 @@ class Event {
         return this.info;
     }
 
-    protected  String getTitle() {
+    protected String getTitle() {
         return this.title;
+    }
+
+    private String fixURL(String u) {
+        if (url != null)
+            return "https://" + u;
+        else
+            return "";
     }
 }
