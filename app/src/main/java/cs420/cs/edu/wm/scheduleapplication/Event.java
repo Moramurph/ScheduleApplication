@@ -6,15 +6,18 @@ class Event {
     private String date;
     private String description;
     private String url;
+    private String image;
+
 
     private String info;
 
 
-    protected Event (String t, String d, String ds, String u) {
+    protected Event (String t, String d, String ds, String u, String i) {
         this.title = t;
         this.date = d;
         this.description = ds;
-        this.url = u;
+        this.image = i;
+        this.url = this.fixURL(u);
     }
 
     protected void initialize() {
@@ -25,7 +28,15 @@ class Event {
         return this.info;
     }
 
-    protected  String getTitle() {
+    protected String getTitle() {
         return this.title;
+    }
+
+    protected String getImage() { return this.image; }
+
+    protected  String getUrl() { return this.url; }
+
+    private String fixURL(String u) {
+        return "https://" + u;
     }
 }

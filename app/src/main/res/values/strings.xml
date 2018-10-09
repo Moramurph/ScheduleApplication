@@ -11,4 +11,5 @@
     <string name="welcome_title">WELCOME</string>
     <string name="welcome_continue">CONTINUE</string>
     <string name="event_creation_submit">SUBMIT</string>
+    <string name="event_information_url_button">VIEW URL</string>
 </resources>

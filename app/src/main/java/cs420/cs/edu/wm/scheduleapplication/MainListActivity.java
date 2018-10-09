@@ -51,6 +51,8 @@ public class MainListActivity extends AppCompatActivity {
 
                 Intent i = new Intent(getApplicationContext(), EventInformationActivity.class);
                 i.putExtra("info", listEvents.get(position).getInformation());
+                i.putExtra("image", listEvents.get(position).getImage());
+                i.putExtra("url", listEvents.get(position).getUrl());
 
                 startActivity(i);
             }
@@ -79,7 +81,11 @@ public class MainListActivity extends AppCompatActivity {
         if (requestCode == REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                Event e = new Event(data.getExtras().getString("title"), data.getExtras().getString("date"), data.getExtras().getString("description"), data.getExtras().getString("url"));
+                Event e = new Event(data.getExtras().getString("title"),
+                        data.getExtras().getString("date"),
+                        data.getExtras().getString("description"),
+                        data.getExtras().getString("url"),
+                        data.getExtras().getString("image"));
                 e.initialize();
                 listEvents.add(e);
                 adapter.add(e.getTitle());
