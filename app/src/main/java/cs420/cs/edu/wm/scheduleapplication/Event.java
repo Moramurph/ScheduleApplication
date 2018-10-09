@@ -18,8 +18,6 @@ class Event {
         this.description = ds;
         this.image = i;
         this.url = this.fixURL(u);
-
-
     }
 
     protected void initialize() {
@@ -39,9 +37,6 @@ class Event {
     protected  String getUrl() { return this.url; }
 
     private String fixURL(String u) {
-        if (url != null)
-            return "https://" + u;
-        else
-            return "";
+        return "https://" + u;
     }
 }

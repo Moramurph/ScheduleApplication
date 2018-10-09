@@ -52,6 +52,7 @@ public class MainListActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), EventInformationActivity.class);
                 i.putExtra("info", listEvents.get(position).getInformation());
                 i.putExtra("image", listEvents.get(position).getImage());
+                i.putExtra("url", listEvents.get(position).getUrl());
 
                 startActivity(i);
             }

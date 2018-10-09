@@ -9,8 +9,8 @@
 
     <TextView
         android:id="@+id/event_information_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="241dp"
+        android:layout_height="309dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="24dp"
         android:text="TextView"
@@ -28,6 +28,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:color/transparent" />
+
+    <Button
+        android:id="@+id/event_information_url_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/event_information_url_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
