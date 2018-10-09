@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -71,7 +72,7 @@ public class EventCreationActivity extends AppCompatActivity {
                 intent.putExtra("date", date);
                 intent.putExtra("description", description);
                 intent.putExtra("url", url);
-                intent.putExtra("image", imageBitmap);
+                intent.putExtra("image", imageFilePath);
 
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -96,8 +97,9 @@ public class EventCreationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
+            //Bundle extras = data.getExtras();
+            imageBitmap = BitmapFactory.decodeFile(imageFilePath);
+            //imageBitmap = (Bitmap) extras.get("data");
             pictureImage.setImageBitmap(imageBitmap);
         }
     }
@@ -113,10 +115,8 @@ public class EventCreationActivity extends AppCompatActivity {
     private void createCameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-
             // Create the File where the photo should go
-            /*
+
             File photoFile = null;
             try {
                 photoFile = createImageFile();
@@ -132,11 +132,11 @@ public class EventCreationActivity extends AppCompatActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
-            */
+
         }
     }
 
-    /*
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -152,7 +152,7 @@ public class EventCreationActivity extends AppCompatActivity {
         imageFilePath = image.getAbsolutePath();
         return image;
     }
-    */
+
 
 
 
