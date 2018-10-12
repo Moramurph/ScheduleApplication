@@ -35,6 +35,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 CharSequence text = "Continue button clicked, switching to Main List Page...";
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(context, text, duration).show();
+
+                finish();
             }
         });
     }
