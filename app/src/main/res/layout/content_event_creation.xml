@@ -159,4 +159,14 @@
         app:layout_constraintStart_toEndOf="@+id/camera_button"
         app:srcCompat="@android:color/transparent" />
 
+    <TextView
+        android:id="@+id/recording_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="56dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/record_button" />
+
 </android.support.constraint.ConstraintLayout>
