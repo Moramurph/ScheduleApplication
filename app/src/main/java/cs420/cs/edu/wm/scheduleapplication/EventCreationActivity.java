@@ -37,7 +37,6 @@ public class EventCreationActivity extends AppCompatActivity {
     private Button cameraButton;
     private ImageButton recordButton;
     private ImageButton playButton;
-    private ImageButton micPause;
 
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
@@ -50,8 +49,6 @@ public class EventCreationActivity extends AppCompatActivity {
     private EditText urlInput;
     private TextView recordingText;
     private TextView playingText;
-
-    private Bitmap imageBitmap;
     private ImageView pictureImage;
 
     private String title;
@@ -121,6 +118,7 @@ public class EventCreationActivity extends AppCompatActivity {
                 intent.putExtra("description", description);
                 intent.putExtra("url", url);
                 intent.putExtra("image", imageFilePath);
+                intent.putExtra("audio", audioFilePath);
 
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -211,14 +209,16 @@ public class EventCreationActivity extends AppCompatActivity {
         try {
             createAudioFile();
         } catch (IOException ex) {
-            // Error occurred while creating the File
+            Log.e(TAG, "Create file failed");
         }
 
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(audioFilePath);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        if (audioFilePath != null) {
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setOutputFile(audioFilePath);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        }
 
         try {
             mRecorder.prepare();
@@ -229,18 +229,16 @@ public class EventCreationActivity extends AppCompatActivity {
         mRecorder.start();
     }
 
-
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
     }
 
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bitmap imageBitmap;
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             imageBitmap = BitmapFactory.decodeFile(imageFilePath);
             pictureImage.setImageBitmap(imageBitmap);
@@ -264,7 +262,7 @@ public class EventCreationActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
+                Log.e(TAG, "Create file failed");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -277,7 +275,6 @@ public class EventCreationActivity extends AppCompatActivity {
 
         }
     }
-
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -308,9 +305,10 @@ public class EventCreationActivity extends AppCompatActivity {
         return audio;
     }
 
-
-
-    private void onDelete( ) {
-        assert true;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
+
 }
