@@ -35,19 +35,21 @@ public class EventCreationActivity extends AppCompatActivity {
 
     private Button submitButton;
     private Button cameraButton;
-    private ImageButton micRecord;
-    private ImageButton micPlay;
+    private ImageButton recordButton;
+    private ImageButton playButton;
     private ImageButton micPause;
 
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
     private boolean mRecording = true;
+    private boolean mPlaying = true;
 
     private EditText titleInput;
     private EditText dateInput;
     private EditText descriptionInput;
     private EditText urlInput;
     private TextView recordingText;
+    private TextView playingText;
 
     private Bitmap imageBitmap;
     private ImageView pictureImage;
@@ -75,7 +77,10 @@ public class EventCreationActivity extends AppCompatActivity {
                 permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 break;
         }
-        if (!permissionToRecordAccepted ) finish();
+        if (permissionToRecordAccepted ) {
+            onRecord(mRecording);
+            changeRecordingState();
+        }
 
     }
 
@@ -89,9 +94,13 @@ public class EventCreationActivity extends AppCompatActivity {
         dateInput = findViewById(R.id.date_input);
         descriptionInput = findViewById(R.id.description_input);
         urlInput = findViewById(R.id.url_input);
-        micRecord = findViewById(R.id.record_button);
+        recordButton = findViewById(R.id.record_button);
         setupRecordButton();
         recordingText = findViewById(R.id.recording_text);
+        playingText = findViewById(R.id.playing_text);
+
+        playButton = findViewById(R.id.play_button);
+        setupPlayButton();
 
         submitButton = findViewById(R.id.submit_button);
         setupSubmitButton();
@@ -99,11 +108,7 @@ public class EventCreationActivity extends AppCompatActivity {
         cameraButton = findViewById(R.id.camera_button);
         setupCameraButton();
 
-        ActivityCompat.requestPermissions(EventCreationActivity.this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
-
     }
-
-
 
     private void setupSubmitButton() {
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -138,16 +143,24 @@ public class EventCreationActivity extends AppCompatActivity {
     }
 
     private void setupRecordButton() {
-        micRecord.setOnClickListener(new View.OnClickListener() {
+        recordButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onRecord(mRecording);
+                ActivityCompat.requestPermissions(EventCreationActivity.this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+            }
+        });
+    }
 
-                if (mRecording) {
-                    recordingText.setText("RECORDING...");
+    private void setupPlayButton() {
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPlay(mPlaying);
+                if (mPlaying) {
+                    playingText.setText("PLAYING...");
                 } else {
-                    recordingText.setText("");
+                    playingText.setText("");
                 }
-                mRecording = !mRecording;
+                mPlaying = !mPlaying;
             }
         });
     }
@@ -161,10 +174,42 @@ public class EventCreationActivity extends AppCompatActivity {
 
     }
 
-    private void startRecording() {
-        File audioFile = null;
+    private void changeRecordingState() {
+        if (mRecording) {
+            recordingText.setText("RECORDING...");
+        } else {
+            recordingText.setText("");
+        }
+        mRecording = !mRecording;
+    }
+
+    private void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
+        }
+    }
+
+    private void startPlaying() {
+        mPlayer = new MediaPlayer();
         try {
-            audioFile = createAudioFile();
+            mPlayer.setDataSource(audioFilePath);
+            mPlayer.prepare();
+            mPlayer.start();
+        } catch (IOException e) {
+            Log.e(TAG, "prepare() failed");
+        }
+    }
+
+    private void stopPlaying() {
+        mPlayer.release();
+        mPlayer = null;
+    }
+
+    private void startRecording() {
+        try {
+            createAudioFile();
         } catch (IOException ex) {
             // Error occurred while creating the File
         }

@@ -9,6 +9,16 @@
     tools:showIn="@layout/activity_event_creation">
 
     <TextView
+        android:id="@+id/playing_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="216dp"
+        android:layout_marginTop="56dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/record_button" />
+
+    <TextView
         android:id="@+id/title_label"
         android:layout_width="43dp"
         android:layout_height="21dp"
@@ -125,16 +135,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/record_button"
         app:srcCompat="@android:drawable/ic_media_play" />
-
-    <ImageButton
-        android:id="@+id/pause_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="172dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/play_button"
-        app:srcCompat="@android:drawable/ic_media_pause" />
 
     <Button
         android:id="@+id/submit_button"
