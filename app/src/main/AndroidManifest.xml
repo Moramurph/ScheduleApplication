@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cs420.cs.edu.wm.scheduleapplication">
 
-    <uses-sdk android:minSdkVersion="20"
-        android:targetSdkVersion="27"
-        android:maxSdkVersion="28" />
+    <uses-sdk android:maxSdkVersion="27" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -13,23 +13,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainListActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".WelcomeActivity">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false"/>
+
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EventCreationActivity" />
+
+        <activity
+            android:name=".EventCreationActivity"
+            android:exported="false"/>
         <activity
             android:name=".EventInformationActivity"
-            android:label="@string/title_activity_event_information"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -40,8 +47,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
-    </application>
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    </application>
 
 </manifest>
