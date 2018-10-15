@@ -52,6 +52,7 @@ public class MainListActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), EventInformationActivity.class);
                 i.putExtra("info", listEvents.get(position).getInformation());
                 i.putExtra("image", listEvents.get(position).getImage());
+                i.putExtra("audio", listEvents.get(position).getAudio());
                 i.putExtra("url", listEvents.get(position).getUrl());
 
                 startActivity(i);
@@ -85,7 +86,8 @@ public class MainListActivity extends AppCompatActivity {
                         data.getExtras().getString("date"),
                         data.getExtras().getString("description"),
                         data.getExtras().getString("url"),
-                        data.getExtras().getString("image"));
+                        data.getExtras().getString("image"),
+                        data.getExtras().getString("audio"));
                 e.initialize();
                 listEvents.add(e);
                 adapter.add(e.getTitle());
@@ -115,7 +117,4 @@ public class MainListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onDelete( ) {
-        assert true;
-    }
 }

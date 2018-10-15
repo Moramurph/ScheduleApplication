@@ -7,16 +7,17 @@ class Event {
     private String description;
     private String url;
     private String image;
-
+    private String audio;
 
     private String info;
 
 
-    protected Event (String t, String d, String ds, String u, String i) {
+    protected Event (String t, String d, String ds, String u, String i, String a) {
         this.title = t;
         this.date = d;
         this.description = ds;
         this.image = i;
+        this.audio = a;
         this.url = this.fixURL(u);
     }
 
@@ -33,6 +34,8 @@ class Event {
     }
 
     protected String getImage() { return this.image; }
+
+    protected String getAudio() { return this.audio; }
 
     protected  String getUrl() { return this.url; }
 

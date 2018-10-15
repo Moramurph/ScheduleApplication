@@ -1,22 +1,29 @@
 package cs420.cs.edu.wm.scheduleapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -28,19 +35,51 @@ public class EventCreationActivity extends AppCompatActivity {
 
     private Button submitButton;
     private Button cameraButton;
+    private ImageButton recordButton;
+    private ImageButton playButton;
+
+    private MediaRecorder mRecorder;
+    private MediaPlayer mPlayer;
+    private boolean mRecording = true;
+    private boolean mPlaying = true;
+
     private EditText titleInput;
     private EditText dateInput;
     private EditText descriptionInput;
     private EditText urlInput;
-    private Bitmap imageBitmap;
+    private TextView recordingText;
+    private TextView playingText;
     private ImageView pictureImage;
+
     private String title;
     private String date;
     private String description;
     private String url;
-    private String imageFilePath;
+    private static String imageFilePath = null;
+    private static String audioFilePath = null;
+
     private final String TAG = "EventCreation";
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+
+    // Requesting permission to RECORD_AUDIO
+    private boolean permissionToRecordAccepted = false;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if (permissionToRecordAccepted ) {
+            onRecord(mRecording);
+            changeRecordingState();
+        }
+
+    }
 
 
     @Override
@@ -52,8 +91,14 @@ public class EventCreationActivity extends AppCompatActivity {
         dateInput = findViewById(R.id.date_input);
         descriptionInput = findViewById(R.id.description_input);
         urlInput = findViewById(R.id.url_input);
+        recordButton = findViewById(R.id.record_button);
+        setupRecordButton();
+        recordingText = findViewById(R.id.recording_text);
+        playingText = findViewById(R.id.playing_text);
 
-        //TODO Make sure that url is using proper https://
+        playButton = findViewById(R.id.play_button);
+        setupPlayButton();
+
         submitButton = findViewById(R.id.submit_button);
         setupSubmitButton();
         pictureImage = findViewById(R.id.picture_preview);
@@ -73,6 +118,7 @@ public class EventCreationActivity extends AppCompatActivity {
                 intent.putExtra("description", description);
                 intent.putExtra("url", url);
                 intent.putExtra("image", imageFilePath);
+                intent.putExtra("audio", audioFilePath);
 
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -94,12 +140,107 @@ public class EventCreationActivity extends AppCompatActivity {
         });
     }
 
+    private void setupRecordButton() {
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ActivityCompat.requestPermissions(EventCreationActivity.this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+            }
+        });
+    }
+
+    private void setupPlayButton() {
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPlay(mPlaying);
+                if (mPlaying) {
+                    playingText.setText("PLAYING...");
+                } else {
+                    playingText.setText("");
+                }
+                mPlaying = !mPlaying;
+            }
+        });
+    }
+
+    private void onRecord(boolean record) {
+        if (record) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+
+    }
+
+    private void changeRecordingState() {
+        if (mRecording) {
+            recordingText.setText("RECORDING...");
+        } else {
+            recordingText.setText("");
+        }
+        mRecording = !mRecording;
+    }
+
+    private void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
+        }
+    }
+
+    private void startPlaying() {
+        mPlayer = new MediaPlayer();
+        try {
+            mPlayer.setDataSource(audioFilePath);
+            mPlayer.prepare();
+            mPlayer.start();
+        } catch (IOException e) {
+            Log.e(TAG, "prepare() failed");
+        }
+    }
+
+    private void stopPlaying() {
+        mPlayer.release();
+        mPlayer = null;
+    }
+
+    private void startRecording() {
+        try {
+            createAudioFile();
+        } catch (IOException ex) {
+            Log.e(TAG, "Create file failed");
+        }
+
+        if (audioFilePath != null) {
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setOutputFile(audioFilePath);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        }
+
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Log.e(TAG, "prepare() failed");
+        }
+
+        mRecorder.start();
+    }
+
+    private void stopRecording() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bitmap imageBitmap;
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //Bundle extras = data.getExtras();
             imageBitmap = BitmapFactory.decodeFile(imageFilePath);
-            //imageBitmap = (Bitmap) extras.get("data");
             pictureImage.setImageBitmap(imageBitmap);
         }
     }
@@ -121,8 +262,7 @@ public class EventCreationActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-
+                Log.e(TAG, "Create file failed");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -135,7 +275,6 @@ public class EventCreationActivity extends AppCompatActivity {
 
         }
     }
-
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -153,10 +292,23 @@ public class EventCreationActivity extends AppCompatActivity {
         return image;
     }
 
-
-
-
-    private void onDelete( ) {
-        assert true;
+    private File createAudioFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String audioFileName = "3GP_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        File audio = File.createTempFile(
+                audioFileName,  // prefix
+                ".3gp",         // suffix
+                storageDir      // directory
+        );
+        audioFilePath = audio.getAbsolutePath();
+        return audio;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
 }
