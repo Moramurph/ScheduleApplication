@@ -22,7 +22,7 @@ class Event {
     }
 
     protected void initialize() {
-        this.info = this.title + "      " + this.date + "\n" + this.description + "\n" + this.url;
+        this.info = this.title + "        " + this.date + "\n" + this.description + "\n" + this.url;
     }
 
     protected String getInformation() {
